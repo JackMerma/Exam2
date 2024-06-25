@@ -1,9 +1,8 @@
 package com.example.beaconScanner.canvasLibrary.utils.models
 
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.Canvas
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.drawscope.Stroke
 import com.example.beaconScanner.canvasLibrary.utils.Point
 import androidx.compose.ui.graphics.Color
@@ -15,17 +14,17 @@ fun Room(
     modifier: Modifier = Modifier,
     data: ArrayList<Point>
 ){
-    Spacer(
+    Canvas(
         modifier = modifier
-            .drawWithCache {
-                val path = Path()
-                path.moveTo(data[0].x, data[0].y)
-                for (point in data) path.lineTo(point.x, point.y)
-                path.close()
-                onDrawBehind {
-                    drawPath(path, Color.DarkGray, style = Stroke(width = 10f))
-                }
-            }
             .fillMaxSize()
-    )
+    ) {
+        val path = Path().apply {
+            moveTo(data[0].x, data[0].y)
+            for (point in data) {
+                lineTo(point.x, point.y)
+            }
+            close()
+        }
+        drawPath(path, Color.DarkGray, style = Stroke(width = 10f))
+    }
 }

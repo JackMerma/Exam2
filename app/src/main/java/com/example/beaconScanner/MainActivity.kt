@@ -4,10 +4,18 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
@@ -24,15 +32,42 @@ class MainActivity : ComponentActivity() {
         setContent {
             PolygonoTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Room(
-                        data = loadData(),
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                    Person(
-                        modifier = Modifier,
-                        positionX = 174,
-                        positionY = 415
-                    )
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            horizontalArrangement = Arrangement.SpaceEvenly
+                        ) {
+                            Button(onClick = { /* Acción Start */ }) {
+                                Text("Start")
+                            }
+                            Button(onClick = { /* Acción Stop */ }) {
+                                Text("Stop")
+                            }
+                        }
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(16.dp)
+                        ) {
+                            Room(
+                                data = loadData(),
+                                modifier = Modifier
+                                    .fillMaxSize()
+                            )
+                            Person(
+                                modifier = Modifier,
+                                positionX = 100,
+                                positionY = 100
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -40,18 +75,17 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun loadData(): ArrayList<Point>{
+fun loadData(): ArrayList<Point> {
     val configuration = LocalConfiguration.current
     val density = LocalDensity.current
-    val screenHeight = with(density){configuration.screenHeightDp.dp.roundToPx()}
-    val factor = screenHeight*(0.05).toFloat()
+    val screenHeight = with(density) { configuration.screenHeightDp.dp.roundToPx() }
+    val factor = screenHeight * 0.05f
 
-    val points = ArrayList<Point>()
-    points.add(Point(1 * factor, 1 * factor))
-    points.add(Point(8 * factor, 1 * factor))
-    points.add(Point(8 * factor, 18 * factor))
-    points.add(Point(1 * factor, 18 * factor))
-    points.add(Point(1 * factor, 1 * factor))
-
-    return points
+    return arrayListOf(
+        Point(1 * factor, 1 * factor),
+        Point(8 * factor, 1 * factor),
+        Point(8 * factor, 18 * factor),
+        Point(1 * factor, 18 * factor),
+        Point(1 * factor, 1 * factor)
+    )
 }
