@@ -1,28 +1,22 @@
 package com.example.beaconScanner
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.bluetooth.le.BluetoothLeScanner
 import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanFilter
-import android.bluetooth.le.ScanRecord
 import android.bluetooth.le.ScanResult
 import android.bluetooth.le.ScanSettings
 import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.util.SparseArray
-import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -33,13 +27,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.core.location.LocationManagerCompat
@@ -55,7 +46,6 @@ import com.example.beaconScanner.trilaterationLibrary.NonLinearLeastSquaresSolve
 import com.example.beaconScanner.trilaterationLibrary.TrilaterationFunction
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.apache.commons.math3.fitting.leastsquares.LevenbergMarquardtOptimizer
-import kotlin.math.pow
 import kotlin.math.sqrt
 
 class MainActivity : ComponentActivity() {
