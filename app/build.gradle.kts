@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.polygono"
+    namespace = "com.example.beaconScanner"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.polygono"
+        applicationId = "com.example.beaconScanner"
         minSdk = 28
         targetSdk = 34
         versionCode = 1
@@ -59,6 +59,13 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+
+    // appcompat
+    implementation("androidx.appcompat:appcompat:1.7.0")
+    implementation("androidx.appcompat:appcompat-resources:1.7.0")
+    implementation("org.apache.commons:commons-collections4:4.4")
+    implementation("org.apache.commons:commons-math3:3.6.1")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

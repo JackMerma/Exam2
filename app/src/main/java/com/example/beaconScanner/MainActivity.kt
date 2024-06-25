@@ -1,4 +1,4 @@
-package com.example.polygono
+package com.example.beaconScanner
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -7,17 +7,15 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.imageResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.polygono.ui.theme.PolygonoTheme
-import com.example.polygono.utils.Point
+import com.example.beaconScanner.canvasLibrary.ui.theme.PolygonoTheme
+import com.example.beaconScanner.canvasLibrary.utils.Point
+import com.example.beaconScanner.canvasLibrary.utils.models.Person
+import com.example.beaconScanner.canvasLibrary.utils.models.Room
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,26 +27,6 @@ class MainActivity : ComponentActivity() {
                     Room(
                         data = loadData(),
                         modifier = Modifier.padding(innerPadding)
-                    )
-                    Picture(
-                        image = loadImage(image = R.drawable.momia),
-                        positionX = 60,
-                        positionY = 85
-                    )
-                    Picture(
-                        image = loadImage(image = R.drawable.momia),
-                        positionX = 174,
-                        positionY = 85
-                    )
-                    Picture(
-                        image = loadImage(image = R.drawable.momia),
-                        positionX = 290,
-                        positionY = 85
-                    )
-                    Picture(
-                        image = loadImage(image = R.drawable.momia),
-                        positionX = 60,
-                        positionY = 195
                     )
                     Person(
                         modifier = Modifier,
@@ -77,10 +55,3 @@ fun loadData(): ArrayList<Point>{
 
     return points
 }
-
-@Composable
-fun loadImage(image: Int): ImageBitmap{
-    return ImageBitmap.imageResource(id = image)
-}
-
-

@@ -1,4 +1,4 @@
-package com.example.polygono.ui.theme
+package com.example.beaconScanner.canvasLibrary.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

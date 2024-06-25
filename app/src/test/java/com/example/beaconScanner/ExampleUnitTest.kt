@@ -1,4 +1,4 @@
-package com.example.polygono
+package com.example.beaconScanner
 
 import org.junit.Test
 
