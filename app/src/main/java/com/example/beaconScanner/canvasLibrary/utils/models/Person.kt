@@ -17,28 +17,29 @@ import kotlin.random.Random
 @Composable
 fun Person(
     modifier: Modifier = Modifier,
-    positionX: Int,
-    positionY: Int,
+    positionX: Double,
+    positionY: Double,
 ){
-    val posX = remember { mutableStateOf(positionX.dp) }
-    val posY = remember { mutableStateOf(positionY.dp) }
-
-    fun updatePosition() {
-        posX.value = Random.nextInt(60, 174).dp
-        posY.value = Random.nextInt(85, 830).dp
-    }
+//    val posX = remember { mutableStateOf(positionX.dp) }
+//    val posY = remember { mutableStateOf(positionY.dp) }
+//
+//    fun updatePosition(X: Double, Y: Double) {
+//        posX.value = X.dp
+//        posY.value = Y.dp
+//    }
 
     Canvas(
         modifier = modifier
             .size(50.dp)
-            .offset(posX.value, posY.value)
+            .offset(positionX.dp, positionY.dp)
             .border(1.dp, Color.Black)
             .pointerInput(Unit) {
                 detectTapGestures {
-                    updatePosition()
+//                    updatePosition()
                 }
             },
     ) {
         drawCircle(Color.Magenta)
     }
+//    updatePosition(positionX, positionY)
 }
