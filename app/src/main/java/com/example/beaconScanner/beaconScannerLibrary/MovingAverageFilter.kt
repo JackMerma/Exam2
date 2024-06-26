@@ -12,6 +12,7 @@ class MovingAverageFilter(private val size: Int) {
 
     fun calculateDistance(txPower:Int, rssi: Int): Double {
         val rssi = filter(signal= rssi.toFloat(), R=0.01f,Q=3.0f);
+
         val n = 3.0
         //val factor = (-1 * txPower - rssi) / (10 * n)
         val factor = (txPower - rssi) / (10 * n)
@@ -28,11 +29,11 @@ class MovingAverageFilter(private val size: Int) {
             Log.d(TAG, "Using EMA filter: $EMA")
         }
         Log.d(TAG, "movingAverage: ${EMA}")
-
         distanceQueue.add(distance)
         if (distanceQueue.size > size) {
             distanceQueue.remove()
         }
+        Log.d(TAG, "queue  ${distanceQueue}")
         return EMA
     }
 

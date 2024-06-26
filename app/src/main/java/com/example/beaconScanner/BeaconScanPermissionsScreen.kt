@@ -1,7 +1,9 @@
 package com.example.beaconScanner
 
 import android.Manifest
+import android.Manifest.permission.BLUETOOTH
 import android.Manifest.permission.BLUETOOTH_ADMIN
+import android.Manifest.permission.BLUETOOTH_SCAN
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
@@ -57,20 +59,26 @@ fun BeaconScanPermissionsScreen() {
             }
         }
     }
-
-    for (permissionGroup in permissionGroups) {
-        PermissionButton(
-            permissionGroup = permissionGroup,
-            onClick = {
-                promptForPermissions(requestPermissionLauncher, permissionGroup)
-                if(allPermissionGroupsGranted(context, permissionGroups = permissionGroups)){
-                    continueButtonEnabled.value = true
+    Row {
+        Box {
+            Column {
+                for (permissionGroup in permissionGroups) {
+                    PermissionButton(
+                        permissionGroup = permissionGroup,
+                        onClick = {
+                            promptForPermissions(requestPermissionLauncher, permissionGroup)
+                            if(allPermissionGroupsGranted(context, permissionGroups = permissionGroups)){
+                                continueButtonEnabled.value = true
+                            }
+                        },
+                        modifier = Modifier.padding(bottom = 4.dp),
+                        enabled = !continueButtonEnabled.value
+                    )
                 }
-            },
-            modifier = Modifier.padding(bottom = 8.dp),
-            enabled = !continueButtonEnabled.value
-        )
+            }
+        }
     }
+
 }
 
 fun allPermissionGroupsGranted(context: Context, permissionGroups: List<Array<String>>): Boolean {
@@ -99,7 +107,7 @@ fun PermissionButton(
         modifier = modifier.fillMaxWidth()
     ) {
         Text(
-            text = permissionGroup.get(permissionGroup.size-1),
+            text = "Permission Needed",
         )
     }
 }
@@ -136,7 +144,7 @@ class PermissionsHelper(private val context: Context) {
             permissions.add(arrayOf(Manifest.permission.ACCESS_BACKGROUND_LOCATION))
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            permissions.add(arrayOf(Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT))
+            permissions.add(arrayOf(BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT))
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             permissions.add(arrayOf(Manifest.permission.POST_NOTIFICATIONS))

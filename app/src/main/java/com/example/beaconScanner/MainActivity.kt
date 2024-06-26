@@ -62,10 +62,13 @@ class MainActivity : ComponentActivity() {
     private val beacons = HashMap<String, Beacon>();
     private val _resultBeacons = MutableStateFlow("No beacons Detected")
     val trilateration = mutableStateOf("-")
-    val pointX_position = mutableStateOf(100.0)
-    val pointY_position = mutableStateOf(100.0)
     val ROOM_LENGTH = 600.0
-    val ROOM_HEIGHT = 545.0
+    val ROOM_HEIGHT = 600.0
+    val pointX_position = mutableStateOf(ROOM_LENGTH - 300)
+    val pointY_position = mutableStateOf(ROOM_HEIGHT - 300)
+
+//    val ROOM_LENGTH = 430.0
+//    val ROOM_HEIGHT = 360.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -119,7 +122,7 @@ class MainActivity : ComponentActivity() {
                             ) {
                                 Text("Stop")
                             }
-                            BeaconScanPermissionsScreen()
+//                            BeaconScanPermissionsScreen()
                         }
                         Box(
                             modifier = Modifier
@@ -254,8 +257,8 @@ class MainActivity : ComponentActivity() {
                 // Definir una lista de UUIDs permitidos
                 val allowedUUIDs = listOf(
                     "2f234454cf6d4a0fadf2f4911ba9ffb6",
-                    "2f234454cf6d4a0fadf2f4911ba9ffb7",
-                    "2f234454cf6d4a0fadf2f4911ba9fff8"
+                    "2f234454cf6d4a0fadf2f4911ba9ffa0",
+                    "2f234454cf6d4a0fadf2f4911ba9ffb7"
                     // Añade más UUIDs aquí
                 )
 
@@ -314,9 +317,9 @@ class MainActivity : ComponentActivity() {
                             doubleArrayOf(ROOM_LENGTH, ROOM_HEIGHT)
                         )
 
-                        val b1 = "2f234454cf6d4a0fadf2f4911ba9ffb6"
-                        val b2 = "2f234454cf6d4a0fadf2f4911ba9ffb7"
-                        val b3 = "2f234454cf6d4a0fadf2f4911ba9fff8"
+                        val b1 = allowedUUIDs[0]
+                        val b3 = allowedUUIDs[2]
+                        val b2 = allowedUUIDs[1]
                         if(beacons.get(b1)?.distance != null &&
                             beacons.get(b2)?.distance != null &&
                             beacons.get(b3)?.distance != null){
@@ -352,21 +355,30 @@ class MainActivity : ComponentActivity() {
         var nolineal = NonLinearLeastSquaresSolver(trilaterationFunction, LevenbergMarquardtOptimizer())
 
         var linealSolve = lineal.solve()
+        var point = trilaterate(positions, distance)
         var nolinealSolve =  nolineal.solve()
 
         var lineals = printDoubleArray(linealSolve.toArray())
         var nonlinea = printDoubleArray(nolinealSolve.getPoint().toArray())
 
 //        Log.d("solutions", "linealSolve ${linealSolve}")
-        Log.d("solutions", "no linealSolve ${nolinealSolve.point}")
+//        Log.d("solutions", "no linealSolve ${nolinealSolve.point}")
         val input = nolinealSolve.point.toString()
         val numbers = input.substring(1, input.length - 1) // Elimina las llaves
             .split("[; ]".toRegex()) // Divide por punto y coma o espacio
 //            .map { it.toDouble() } // Convierte cada parte a Double
-        Log.d("solutions", "x: ${numbers[0].toDouble()}"+" y: ${numbers[2].toDouble()}")
-        trilateration.value = " trilateracion no lineal " + nolinealSolve.point + "\n" + "lineal " + linealSolve
-        pointX_position.value = numbers[0].toDouble() * FACTOR_X
-        pointY_position.value = numbers[2].toDouble() * FACTOR_Y
+//        Log.d("solutions", "x: ${numbers[0].toDouble()}"+" y: ${numbers[2].toDouble()}")
+//        Log.d("solutions","x: " ${})
+        trilateration.value = " trilateracion no lineal " + nolinealSolve.point + "\n" +
+                                "lineal " + linealSolve + "\n" +
+                "trilateracion normal: (" + point.x + " : " + point.y + ")" + "\n" +
+                "b1 distance: " + distance[0] + "\n" +
+                "b2 distance: " + distance[1] + "\n" +
+                "b3 distance: " + distance[2]
+        pointX_position.value = (ROOM_LENGTH + numbers[0].toDouble()-400) /** FACTOR_X*/
+        pointY_position.value = (ROOM_HEIGHT + numbers[2].toDouble()-350) /** FACTOR_Y*/
+//        pointX_position.value = point.x * FACTOR_X
+//        pointY_position.value = point.y * FACTOR_Y
     }
 
 
@@ -379,6 +391,36 @@ class MainActivity : ComponentActivity() {
         return output
     }
 }
+
+data class Point(val x: Double, val y: Double)
+
+fun trilaterate(beacons: Array<DoubleArray>, distances: DoubleArray): Point {
+    if (beacons.size < 3 || distances.size < 3) {
+        throw IllegalArgumentException("At least 3 beacons and distances are required.")
+    }
+
+    // Extract coordinates from the DoubleArray for each beacon
+    val p1 = Point(beacons[0][0], beacons[0][1])
+    val p2 = Point(beacons[1][0], beacons[1][1])
+    val p3 = Point(beacons[2][0], beacons[2][1])
+
+    val r1 = distances[0]
+    val r2 = distances[1]
+    val r3 = distances[2]
+
+    val A = 2 * (p2.x - p1.x)
+    val B = 2 * (p2.y - p1.y)
+    val C = r1 * r1 - r2 * r2 - p1.x * p1.x - p1.y * p1.y + p2.x * p2.x + p2.y * p2.y
+    val D = 2 * (p3.x - p2.x)
+    val E = 2 * (p3.y - p2.y)
+    val F = r2 * r2 - r3 * r3 - p2.x * p2.x - p2.y * p2.y + p3.x * p3.x + p3.y * p3.y
+
+    val x = (C * E - F * B) / (E * A - B * D)
+    val y = (C * D - A * F) / (B * D - A * E)
+
+    return Point(x.toFloat(), y.toFloat())
+}
+
 
 fun distanciaEntrePuntos(punto1: Point, punto2: Point): Float {
     val dx = punto2.x - punto1.x
@@ -396,8 +438,8 @@ fun loadData(): ArrayList<Point> {
     return arrayListOf(
         Point(1 * factor, 1 * factor), // inicio
         Point(8 * factor, 1 * factor), // x
-        Point(8 * factor, 15 * factor),
-        Point(1 * factor, 15 * factor), // y
+        Point(8 * factor, 8 * factor),
+        Point(1 * factor, 8 * factor), // y
         Point(1 * factor, 1 * factor)
     )
 }
