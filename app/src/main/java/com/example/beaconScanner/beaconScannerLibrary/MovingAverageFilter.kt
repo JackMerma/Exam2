@@ -5,13 +5,13 @@ import java.util.LinkedList
 
 class MovingAverageFilter(private val size: Int) {
     val distanceQueue = LinkedList<Double>()
-    private val TAG = "EMA Filter";
+    private val TAG = "EMA Filter"
     private var x: Float? = null
     private var cov: Float = 0.0f
 
 
-    fun calculateDistance(txPower:Int, rssi: Int): Double {
-        val rssi = filterKalman(signal= rssi.toFloat(), R=0.01f,Q=3.0f);
+    fun calculateDistance(txPower:Int, rssi_: Int): Double {
+        val rssi = filterKalman(signal= rssi_.toFloat(), R=0.01f,Q=3.0f)
 
         val n = 3.0
         //val factor = (-1 * txPower - rssi) / (10 * n)

@@ -57,8 +57,8 @@ class MainActivity : ComponentActivity() {
     private lateinit var alertDialog: AlertDialog
     private var FACTOR_X = 0.10
     private var FACTOR_Y = 0.10
-    private val beacons = HashMap<String, Beacon>();
-    private val _resultBeacons = MutableStateFlow("No beacons Detected")
+    private val beacons = HashMap<String, Beacon>()
+//    private val _resultBeacons = MutableStateFlow("No beacons Detected")
     val trilateration = mutableStateOf("-")
     val ROOM_LENGTH = 600.0
     val ROOM_HEIGHT = 600.0
