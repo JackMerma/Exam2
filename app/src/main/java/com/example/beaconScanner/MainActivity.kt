@@ -88,7 +88,7 @@ class MainActivity : ComponentActivity() {
                 // Drawing
                 val points = loadData()
                 val canvas_length = distanciaEntrePuntos(points[0],points[1])
-                val canvas_height = distanciaEntrePuntos(points[1],points[3])
+                val canvas_height = distanciaEntrePuntos(points[1],points[2])
 
                 FACTOR_X = canvas_length / ROOM_LENGTH
                 FACTOR_Y = canvas_height / ROOM_HEIGHT
@@ -375,8 +375,8 @@ class MainActivity : ComponentActivity() {
                 "b1 distance: " + distance[0] + "\n" +
                 "b2 distance: " + distance[1] + "\n" +
                 "b3 distance: " + distance[2]
-        pointX_position.value = (ROOM_LENGTH + numbers[0].toDouble()-400) /** FACTOR_X*/
-        pointY_position.value = (ROOM_HEIGHT + numbers[2].toDouble()-350) /** FACTOR_Y*/
+        pointX_position.value = (ROOM_LENGTH + numbers[0].toDouble()-800) /** FACTOR_X*/
+        pointY_position.value = (ROOM_HEIGHT + numbers[2].toDouble()-700) /** FACTOR_Y*/
 //        pointX_position.value = point.x * FACTOR_X
 //        pointY_position.value = point.y * FACTOR_Y
     }
