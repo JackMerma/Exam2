@@ -312,14 +312,15 @@ class MainActivity : ComponentActivity() {
 //                            doubleArrayOf(730.0, 775.0)
 //                            )
                         val positions = arrayOf(
+                            doubleArrayOf(0.0, ROOM_LENGTH),
                             doubleArrayOf(0.0, 0.0),
-                            doubleArrayOf(ROOM_LENGTH, 0.0),
-                            doubleArrayOf(ROOM_LENGTH, ROOM_HEIGHT)
+                            doubleArrayOf(ROOM_HEIGHT, 0.0)
                         )
 
                         val b1 = allowedUUIDs[0]
-                        val b3 = allowedUUIDs[2]
                         val b2 = allowedUUIDs[1]
+                        val b3 = allowedUUIDs[2]
+
                         if(beacons.get(b1)?.distance != null &&
                             beacons.get(b2)?.distance != null &&
                             beacons.get(b3)?.distance != null){
@@ -369,14 +370,17 @@ class MainActivity : ComponentActivity() {
 //            .map { it.toDouble() } // Convierte cada parte a Double
 //        Log.d("solutions", "x: ${numbers[0].toDouble()}"+" y: ${numbers[2].toDouble()}")
 //        Log.d("solutions","x: " ${})
+        pointX_position.value = (ROOM_LENGTH + numbers[0].toDouble()-700) /** FACTOR_X*/
+        pointY_position.value = (ROOM_HEIGHT - numbers[2].toDouble()-200) /** FACTOR_Y*/
         trilateration.value = " trilateracion no lineal " + nolinealSolve.point + "\n" +
                                 "lineal " + linealSolve + "\n" +
                 "trilateracion normal: (" + point.x + " : " + point.y + ")" + "\n" +
                 "b1 distance: " + distance[0] + "\n" +
                 "b2 distance: " + distance[1] + "\n" +
-                "b3 distance: " + distance[2]
-        pointX_position.value = (ROOM_LENGTH + numbers[0].toDouble()-800) /** FACTOR_X*/
-        pointY_position.value = (ROOM_HEIGHT + numbers[2].toDouble()-700) /** FACTOR_Y*/
+                "b3 distance: " + distance[2] + "\n" +
+                "posicionX: " + pointX_position.value + "\n" +
+                "posicionY: " + pointY_position.value
+
 //        pointX_position.value = point.x * FACTOR_X
 //        pointY_position.value = point.y * FACTOR_Y
     }
@@ -436,10 +440,10 @@ fun loadData(): ArrayList<Point> {
     val factor = screenHeight * 0.05f
 
     return arrayListOf(
-        Point(1 * factor, 1 * factor), // inicio
-        Point(8 * factor, 1 * factor), // x
-        Point(8 * factor, 8 * factor),
-        Point(1 * factor, 8 * factor), // y
-        Point(1 * factor, 1 * factor)
+        Point(0.5f * factor, 0.5f * factor), // inicio
+        Point(9.2f * factor, 0.5f * factor), // x
+        Point(9.2f * factor, 9.2f * factor),
+        Point(0.5f * factor, 9.2f * factor), // y
+        Point(0.5f * factor, 0.5f * factor)
     )
 }
