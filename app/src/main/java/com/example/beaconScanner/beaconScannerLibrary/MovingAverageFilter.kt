@@ -11,7 +11,7 @@ class MovingAverageFilter(private val size: Int) {
 
 
     fun calculateDistance(txPower:Int, rssi: Int): Double {
-        val rssi = filter(signal= rssi.toFloat(), R=0.01f,Q=3.0f);
+        val rssi = filterKalman(signal= rssi.toFloat(), R=0.01f,Q=3.0f);
 
         val n = 3.0
         //val factor = (-1 * txPower - rssi) / (10 * n)
@@ -38,7 +38,7 @@ class MovingAverageFilter(private val size: Int) {
     }
 
 
-    fun filter(signal: Float, u: Float = 0.0f,R: Float,
+    fun filterKalman(signal: Float, u: Float = 0.0f,R: Float,
                Q: Float,
                A: Float = 1.0f,
                B: Float = 0.0f,

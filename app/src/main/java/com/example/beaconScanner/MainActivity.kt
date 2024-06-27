@@ -57,8 +57,6 @@ class MainActivity : ComponentActivity() {
     private lateinit var alertDialog: AlertDialog
     private var FACTOR_X = 0.10
     private var FACTOR_Y = 0.10
-
-    //    private lateinit var permissionManager: PermissionManager
     private val beacons = HashMap<String, Beacon>();
     private val _resultBeacons = MutableStateFlow("No beacons Detected")
     val trilateration = mutableStateOf("-")
@@ -79,12 +77,6 @@ class MainActivity : ComponentActivity() {
         
         setContent {
             PolygonoTheme {
-                // Permissions
-//                val context = LocalContext.current
-                // Initialize PermissionManager here
-
-//                permissionManager = PermissionManager.from(LocalContext.current as Activity)
-//                BeaconScanPermissionsScreen()
                 // Drawing
                 val points = loadData()
                 val canvas_length = distanciaEntrePuntos(points[0],points[1])
@@ -122,7 +114,6 @@ class MainActivity : ComponentActivity() {
                             ) {
                                 Text("Stop")
                             }
-//                            BeaconScanPermissionsScreen()
                         }
                         Box(
                             modifier = Modifier
@@ -191,7 +182,7 @@ class MainActivity : ComponentActivity() {
         Log.d(TAG, "Permissions granted, starting scan.")
 //                        val manufacturerId = 0x0118
         val manufacturerId = 0x004C
-        val macAddress = "57:7C:45:AC:ED:FE"
+//        val macAddress = "57:7C:45:AC:ED:FE"
         val scanFilter = ScanFilter.Builder()
             .setManufacturerData(manufacturerId, null) // Ejemplo para iBeacon
 //                            .setDeviceAddress(macAddress)
@@ -239,15 +230,6 @@ class MainActivity : ComponentActivity() {
 
         val mac = result?.device
         val scanRecord = result?.scanRecord
-
-//        if (scanRecord != null) {
-//            Log.d(TAG, "Scan: ${scanRecord.getServiceData()}")
-//        }
-//
-//        if (scanRecord != null) {
-//            Log.d(TAG, "Scan: ${toString(scanRecord.getManufacturerSpecificData())}")
-//        }
-
         val rssi = result?.rssi
 
         if (scanRecord != null) {
@@ -276,7 +258,7 @@ class MainActivity : ComponentActivity() {
                         // Actualiza el RSSI del beacon guardado.
                         beaconSave.rssi = parserBeacon.rssi
 
-                        Log.d(TAG, "uuid ${beaconSave.uuid}")
+//                        Log.d(TAG, "uuid ${beaconSave.uuid}")
 
                         // Calcula la distancia usando el txPower y el RSSI del beacon.
                         val distance = parserBeacon.txPower?.let { txPower ->
@@ -284,33 +266,37 @@ class MainActivity : ComponentActivity() {
                                 beaconSave.calculateDistance(txPower = txPower, rssi = rssi)
                             }
                         }
+                        // Actualiza la distancia
                         beaconSave.distance = distance?.toFloat()
-                        Log.d(TAG, beaconSave.toString() + " distance en el beacon " + beaconSave.distance)
+//                        Log.d(TAG, beaconSave.toString() + " distance en el beacon " + beaconSave.distance)
 
-                        // Actualiza el LiveData _resultBeacons con los detalles del beacon y la distancia.
-                        _resultBeacons.value = beaconSave.toString() + " distance " + distance
+//                        /*solo si queremos mostrar infor de beacons*/
+//                        Actualiza el LiveData _resultBeacons con los detalles del beacon y la distancia.
+//                        _resultBeacons.value = beaconSave.toString() + " distance " + distance
 
-                        Log.d(TAG, beaconSave.uuid + " distance " + distance)
-                        
-                        var txtMessage = ""
-                        var txtMessage2 = ""
-                        var txtMessage3 = ""
-                        
+//                        Log.d(TAG, beaconSave.uuid + " distance " + distance)
+
+                        //funcionalidades en vistas - no usar en compose
+//                        var txtMessage = ""
+//                        var txtMessage2 = ""
+//                        var txtMessage3 = ""
+//
                         // Formatea la distancia a dos decimales.
-                        val rounded_distance = String.format("%.2f", distance).toDouble()
-                        when (allowedUUIDs.indexOf(parserBeacon.uuid)) {
-                            0 -> txtMessage = beaconSave.toString() + " distance " + rounded_distance
-                            1 -> txtMessage2 = beaconSave.toString() + " distance " + rounded_distance
-                            2 -> txtMessage3 = beaconSave.toString() + " distance " + rounded_distance
-                        }
-                        Log.d("Beacons", txtMessage)
-                        Log.d("Beacons", txtMessage2)
-                        Log.d("Beacons", txtMessage3)
+//                        val rounded_distance = String.format("%.2f", distance).toDouble()
+//                        when (allowedUUIDs.indexOf(parserBeacon.uuid)) {
+//                            0 -> txtMessage = beaconSave.toString() + " distance " + rounded_distance
+//                            1 -> txtMessage2 = beaconSave.toString() + " distance " + rounded_distance
+//                            2 -> txtMessage3 = beaconSave.toString() + " distance " + rounded_distance
+//                        }
+//                        Log.d("Beacons", txtMessage)
+//                        Log.d("Beacons", txtMessage2)
+//                        Log.d("Beacons", txtMessage3)
 //                        val positions = arrayOf(
 //                            doubleArrayOf(0.0, 0.0),
 //                            doubleArrayOf(730.0, 0.0),
 //                            doubleArrayOf(730.0, 775.0)
 //                            )
+                        //posiciones en el salon
                         val positions = arrayOf(
                             doubleArrayOf(0.0, ROOM_LENGTH),
                             doubleArrayOf(0.0, 0.0),
@@ -321,6 +307,7 @@ class MainActivity : ComponentActivity() {
                         val b2 = allowedUUIDs[1]
                         val b3 = allowedUUIDs[2]
 
+                        // registrar array de distancia
                         if(beacons.get(b1)?.distance != null &&
                             beacons.get(b2)?.distance != null &&
                             beacons.get(b3)?.distance != null){
@@ -330,12 +317,8 @@ class MainActivity : ComponentActivity() {
                                 beacons.get(b3)?.distance!!.toDouble()
                             )
 //                            Log.d("distances", beacons.get(b1)?.distance.toString() + "/" + beacons.get(b2)?.distance.toString() + "/  "/* beacons.get(b3)?.distance.toString()*/)
-                            trilateration2DZeroDistance(positions, distances)
+                            trilateration(positions, distances)
                         }
-
-
-                        // Actualiza el mensaje de texto con los detalles del beacon y la distancia redondeada.
-                        //txtMessage.text = beaconSave.toString() + " distance " + rounded_distance
                     }
                 }
             }
@@ -350,53 +333,41 @@ class MainActivity : ComponentActivity() {
         Log.d(TAG, "ScanFailed: $it")
     }
 
-    fun trilateration2DZeroDistance(positions: Array<DoubleArray>, distance: DoubleArray){
+    fun trilateration(positions: Array<DoubleArray>, distance: DoubleArray){
         var trilaterationFunction = TrilaterationFunction(positions, distance)
         var lineal = LinearLeastSquaresSolver(trilaterationFunction)
         var nolineal = NonLinearLeastSquaresSolver(trilaterationFunction, LevenbergMarquardtOptimizer())
 
+        //trilateracion lineal
         var linealSolve = lineal.solve()
-        var point = trilaterate(positions, distance)
+        //trilateracion nolineal
         var nolinealSolve =  nolineal.solve()
-
-        var lineals = printDoubleArray(linealSolve.toArray())
-        var nonlinea = printDoubleArray(nolinealSolve.getPoint().toArray())
+        //trilateracion geometrica
+        var point = trilaterate(positions, distance)
 
 //        Log.d("solutions", "linealSolve ${linealSolve}")
 //        Log.d("solutions", "no linealSolve ${nolinealSolve.point}")
         val input = nolinealSolve.point.toString()
         val numbers = input.substring(1, input.length - 1) // Elimina las llaves
             .split("[; ]".toRegex()) // Divide por punto y coma o espacio
-//            .map { it.toDouble() } // Convierte cada parte a Double
 //        Log.d("solutions", "x: ${numbers[0].toDouble()}"+" y: ${numbers[2].toDouble()}")
 //        Log.d("solutions","x: " ${})
+        //actualizacion de posicion de la "persona"
         pointX_position.value = (ROOM_LENGTH + numbers[0].toDouble()-700) /** FACTOR_X*/
         pointY_position.value = (ROOM_HEIGHT - numbers[2].toDouble()-200) /** FACTOR_Y*/
+
+        //imprimir valores de prueba
         trilateration.value = " trilateracion no lineal " + nolinealSolve.point + "\n" +
                                 "lineal " + linealSolve + "\n" +
-                "trilateracion normal: (" + point.x + " : " + point.y + ")" + "\n" +
+                "trilateracion geometrica: (" + point.x + " : " + point.y + ")" + "\n" +
                 "b1 distance: " + distance[0] + "\n" +
                 "b2 distance: " + distance[1] + "\n" +
                 "b3 distance: " + distance[2] + "\n" +
-                "posicionX: " + pointX_position.value + "\n" +
-                "posicionY: " + pointY_position.value
+                "posicionCanvasX: " + pointX_position.value + "\n" +
+                "posicionCanvasY: " + pointY_position.value
 
-//        pointX_position.value = point.x * FACTOR_X
-//        pointY_position.value = point.y * FACTOR_Y
-    }
-
-
-    private fun printDoubleArray(values: DoubleArray) : String {
-        var output = ""
-        for (p in values) {
-            output = output + "p -- "
-        }
-        output = "\n"
-        return output
     }
 }
-
-data class Point(val x: Double, val y: Double)
 
 fun trilaterate(beacons: Array<DoubleArray>, distances: DoubleArray): Point {
     if (beacons.size < 3 || distances.size < 3) {
@@ -404,9 +375,9 @@ fun trilaterate(beacons: Array<DoubleArray>, distances: DoubleArray): Point {
     }
 
     // Extract coordinates from the DoubleArray for each beacon
-    val p1 = Point(beacons[0][0], beacons[0][1])
-    val p2 = Point(beacons[1][0], beacons[1][1])
-    val p3 = Point(beacons[2][0], beacons[2][1])
+    val p1 = Point(beacons[0][0].toFloat(), beacons[0][1].toFloat())
+    val p2 = Point(beacons[1][0].toFloat(), beacons[1][1].toFloat())
+    val p3 = Point(beacons[2][0].toFloat(), beacons[2][1].toFloat())
 
     val r1 = distances[0]
     val r2 = distances[1]

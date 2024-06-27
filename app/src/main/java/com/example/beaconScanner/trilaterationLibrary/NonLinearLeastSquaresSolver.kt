@@ -12,6 +12,9 @@ class NonLinearLeastSquaresSolver(
     function: TrilaterationFunction,
     leastSquaresOptimizer: LeastSquaresOptimizer
 ) {
+    // Solucion no lineal al problema de reduccion de minimos cuadrados
+    // (reduccion de error) en la funcion de trilateracion
+    // No lineal significa que usara curvas para ajustar la funcion
     protected val function: TrilaterationFunction = function
     protected val leastSquaresOptimizer: LeastSquaresOptimizer = leastSquaresOptimizer
 

@@ -7,6 +7,9 @@ import org.apache.commons.math3.linear.RealMatrix
 import org.apache.commons.math3.linear.RealVector
 
 class LinearLeastSquaresSolver(function: TrilaterationFunction) {
+    // Solucion lineal al problema de reduccion de minimos cuadrados
+    // (reduccion de error) en la funcion de trilateracion
+    // lineal significa que usara vectores (lineas rectas) para ajustar la funcion
     protected val function: TrilaterationFunction = function
 
     @JvmOverloads

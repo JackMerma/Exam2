@@ -11,6 +11,9 @@ import kotlin.math.max
 
 class TrilaterationFunction(positions: Array<DoubleArray>, distances: DoubleArray) :
     MultivariateJacobianFunction {
+        // Funcion que va representar el comportamiento de
+        // la matriz de posiciones a partir de 3 puntos estaticos en
+        // coordenadas X e Y
     /**
      * Known positions of static nodes
      */
